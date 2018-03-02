@@ -1,0 +1,41 @@
+<html>
+<head>
+  <title>A Leaflet BioEnergyConditions map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <style>
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100vh;
+    width: 100vw;
+}
+#map{ height: 100% }
+  </style>
+</head>
+<body>
+<h1>Testing BioEnergyConditionsIndicator</h1>
+  <div id="map"></div>
+
+  <script>
+
+  // initialize the map
+  var map = L.map('map').setView([62.24, 25.75], 10);
+  // load a tile layer
+  L.tileLayer('https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=e60422e636f34988a79015402724757b',
+    {
+      attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>, Data by <a href="http://mass.gov/mgis">MassGIS</a>',
+      maxZoom: 17,
+      minZoom: 9
+    }).addTo(map);
+
+  var wmsLayer = L.tileLayer.wms('http://demo.opengeo.org/geoserver/ows?', {
+    layers: 'nasa:bluemarble'
+#  }).addTo(map);
+  
+  </script>
+</body>
+</html>

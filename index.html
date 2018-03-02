@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Leaflet TimeDimension Clim4Energy Pilot</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<link rel="shortcut icon" href="img/favicon.png" type="image/png" />
+	<link rel="stylesheet" href="http:////maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" />
+        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css" />
+        <link rel="stylesheet" href="js/leaflet.timedimension.control.min.css" />
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Bioenergy production conditions</h1>
+		<details><summary>click for guidance</summary>
+		  <p>The top right of the <b>map layer icon</b> lets you choose between different variables to be visualized. Each layer are the average or 20% and 80% <a href="http://encyclopedia2.thefreedictionary.com/Fractile">fractiles</a> of the ECMWF Seasonal Forecast of November 2016 7 months ahead. The forecast has in total an ensemble of 50 members. Here 3 statistical values for Frozen soil depth, snow depth and thawing on top of frozen soil are available. The colour legend is the same for all map layers</p>
+		  <p>Below the map are <b>three graphs</b> that show timeseries on the city of Kajaani or any point on the map that is clicked on. Moving the moves on top shows exact values for all variables at that timestep. Drag drop allows zooming the graphs. Doubleclick to zoom out.</p>
+		  <p>Top graph shows a <b>bioenergy production conditions indicator</b> for average (green solid bar) or 20% (cyan line) or 80% (violet line) fractiles. The indicator is <b>0=bad</b> if harvesting conditions based on soil bearing capacity are bad, <b>2=good</b>, <b>1=uncertain</b>. The indicator is based on thresholds for frozen soil and snow depths. Good is then snow is deeper than 40cm or frozen soil deeper than 20cm. Bad conditions are frozen soil under 5cm deep or snow under 10cm. The fractiles and average of the seasonal forecast estimate the probability of indicator values. The most certainly good conditions periods are when violet lines at 2.</p>
+		  <p>Second graph shows <b>frozen soil depth</b> and on times <b>top thawing depth</b>. Green graph is frozen depth at 20% fractile, light brown is the average and violet the 80% fractile.</p>
+		  <p>The bottom graph is <b>snow depth</b> with the same statistics and colours avg=green, f20=cyan and f80=violet.</p>
+		</details>
+            </header>
+            <div id="map" class="map"><p id="param"></p></div>
+	    <div id="graphB"></div>
+	    <div id="graph"></div>
+	    <div id="labels"></div>
+	    <div id="graphsd"></div>
+            <div id="footer">
+            <a href="http://clim4energy.climate.copernicus.eu/">Clim4Energy</a></div>              </div>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"></script>
+	<script type="text/javascript" src="js/dygraph-combined.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js"></script>
+        <script type="text/javascript" src="js/leaflet.timedimension.js"></script>
+        <script type="text/javascript" src="js/leaflet.timedimension.util.js"></script>
+        <script type="text/javascript" src="js/leaflet.timedimension.layer.js"></script>
+        <script type="text/javascript" src="js/leaflet.timedimension.layer.wms.js"></script>
+        <script type="text/javascript" src="js/leaflet.timedimension.player.js"></script>
+        <script type="text/javascript" src="js/leaflet.timedimension.control.js"></script>
+        <script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/anim.js"></script>
+    </body>
+</html>

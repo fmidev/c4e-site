@@ -1,0 +1,138 @@
+<html>
+<head>
+  <title>A Leaflet BioEnergyConditions map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+  <script src="/js/leaflet.timedimension.min.js"></script>
+  <style src="/js/leaflet.timedimension.min.css"></style>
+  <style>
+    #map{ height: 100% }
+    #map.h1{ position: absolute; top: 50px; left:50px; width: 100%; }
+  </style>
+</head>
+<body>
+  <div id="map">
+  <h1>Copernicus Climate4Energy - BioenergyConditions Pilot</h1></div>
+  <script>
+
+  // initialize the map
+var map = L.map('map', {
+    zoom: 5,
+    fullscreenControl: true,
+    timeDimension: true,
+    timeDimensionControl: true,
+    center: [65.01, 25.46]
+});
+
+var smartWMS = "http://c4e.fmi.fi:8080/wms";
+//thredds.socib.es/thredds/wms/observational/satellite/altimetry/aviso/madt/altimetry_aviso_madt_L4_agg/altimetry_aviso_madt_L4_agg_best.ncd";
+
+var sdLayer = L.tileLayer.wms(smartWMS, {
+    layers: 'adt',
+    format: 'image/png',
+    transparent: true,
+    colorscalerange: '-0.4,0.4',
+    abovemaxcolor: "extend",
+    belowmincolor: "extend",
+    numcolorbands: 100,    
+    styles: 'boxfill/rainbow'
+});
+var heigthContourLayer = L.tileLayer.wms(smartWMS, {
+    layers: 'adt',
+    format: 'image/png',
+    transparent: true,
+    colorscalerange: '-0.5,0.5',
+    numcontours: 11,    
+    styles: 'contour/rainbow'
+});
+
+var velocityLayer = L.nonTiledLayer.wms(smartWMS, {
+    layers: 'surface_geostrophic_sea_water_velocity',
+    format: 'image/png',
+    transparent: true,
+    colorscalerange: '-20,100',
+    markerscale: 10,
+    markerspacing: 8,
+    abovemaxcolor: "extend",
+    belowmincolor: "extend",
+    numcolorbands: 100,    
+    styles: 'prettyvec/greyscale'
+});
+
+var sdTimeLayer = L.timeDimension.layer.wms(sdLayer, {
+    updateTimeDimension: true,
+});
+var heightContourTimeLayer = L.timeDimension.layer.wms(heigthContourLayer, {
+    updateTimeDimension: false,
+});
+var velocityTimeLayer = L.timeDimension.layer.wms(velocityLayer, {
+    updateTimeDimension: false,
+});
+
+var overlayMaps = {
+    "Snow depth average": sdTimeLayer,
+    "AVISO - Sea surface height above geoid (Contour)": heightContourTimeLayer,
+    "AVISO - Surface geostrophic sea water velocity": velocityTimeLayer
+};
+
+// Legends
+var sdLegend = L.control({
+    position: 'bottomright'
+});
+sdLegend.onAdd = function(map) {
+    var src = smartWMS + "?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetLegendGraphic&LAYER=adt&colorscalerange=-0.4,0.4&PALETTE=rainbow&transparent=TRUE";
+    var div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML +=
+        '<img src="' + src + '" alt="legend">';
+    return div;
+};
+
+var veloLegend = L.control({
+    position: 'bottomright'
+});
+veloLegend.onAdd = function(map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    div.innerHTML += 'Snow Depth<br/>ensemble average/cm';
+    return div;
+};
+
+
+map.on('overlayadd', function(eventLayer) {
+    if (eventLayer.name == 'Snow depth average') {
+        sdLegend.addTo(this);
+    } else if (eventLayer.name == 'AVISO - Surface geostrophic sea water velocity') {
+        velocityLegend.addTo(this);
+    } 
+});
+
+map.on('overlayremove', function(eventLayer) {
+    if (eventLayer.name == 'Snow depth average') {
+        map.removeControl(heigthLegend);
+    } else if (eventLayer.name == 'AVISO - Surface geostrophic sea water velocity') {
+        map.removeControl(velocityLegend);
+    }     
+});
+
+var baseLayers = getCommonBaseLayers(map); // see baselayers.js
+L.control.layers(baseLayers, overlayMaps).addTo(map);
+
+sdTimeLayer.addTo(map);
+//heightContourTimeLayer.addTo(map);
+//velocityTimeLayer.addTo(map);  var marker = L.marker([60.2039,24.9603]).addTo(map);
+//  marker.bindTooltip("Copernicus Climate4Energy<br /> BioEnergyConditions Pilot").openTooltip();
+
+  // load a tile layer
+  L.tileLayer('https://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=e60422e636f34988a79015402724757b',
+    {
+      attribution: 'Tiles and Data by <a href="http://www.thunderforest.com/">Thunderforest</a>',
+      maxZoom: 22,
+      minZoom: 0
+    }).addTo(map);
+
+//  var wmsLayer = L.tileLayer.wms('http://52.16.211.9:8080/wms?', {
+//    layers: 'fmi:ecmwf:snowdepth'
+//  }).addTo(map);
+  
+  </script>
+</body>
+</html>
